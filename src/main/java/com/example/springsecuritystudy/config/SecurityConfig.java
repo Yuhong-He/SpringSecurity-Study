@@ -1,6 +1,8 @@
 package com.example.springsecuritystudy.config;
 
 import com.example.springsecuritystudy.filter.JwtAuthenticationTokenFilter;
+import com.example.springsecuritystudy.handler.AccessDeniedHandlerImpl;
+import com.example.springsecuritystudy.handler.AuthenticationEntryPointImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+
+    @Autowired
+    private AuthenticationEntryPointImpl authenticationEntryPoint;
+
+    @Autowired
+    private AccessDeniedHandlerImpl accessDeniedHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -39,6 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
+                .accessDeniedHandler(accessDeniedHandler);
+
         http.cors();
     }
 

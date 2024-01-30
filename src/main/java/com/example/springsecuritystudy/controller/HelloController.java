@@ -12,4 +12,16 @@ public class HelloController {
     public String hello() {
         return "Hello World!";
     }
+
+    @RequestMapping("/hello2")
+    @PreAuthorize("hasAuthority('system:dept:list2')")
+    public String hello2() {
+        return "Hello World!";
+    }
+
+    @RequestMapping("/hello3")
+    @PreAuthorize("@ex.hasAuthority('system:dept:list')")
+    public String hello3() {
+        return "Hello World!";
+    }
 }
