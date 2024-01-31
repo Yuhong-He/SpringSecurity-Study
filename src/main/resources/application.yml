@@ -19,3 +19,6 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml
 server:
   port: 8888
+token:
+  signing:
+    key: 413F4428472B4B6250655368566D5970337336763979244226452948404D6351

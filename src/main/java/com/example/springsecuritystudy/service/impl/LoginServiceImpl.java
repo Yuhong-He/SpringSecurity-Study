@@ -5,8 +5,8 @@ import com.example.springsecuritystudy.domain.LoginUser;
 import com.example.springsecuritystudy.domain.ResponseResult;
 import com.example.springsecuritystudy.domain.User;
 import com.example.springsecuritystudy.mapper.UserMapper;
+import com.example.springsecuritystudy.service.JwtService;
 import com.example.springsecuritystudy.service.LoginService;
-import com.example.springsecuritystudy.utils.JwtUtil;
 import com.example.springsecuritystudy.utils.RedisCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements LoginService {
+
+    private final JwtService jwtService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,7 +44,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         // 2. Generate JWT
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
         String id = loginUser.getUser().getId().toString();
-        String jwt = JwtUtil.createJWT(id);
+        String jwt = jwtService.generateToken(id);
         Map<String, String> map = new HashMap<>();
         map.put("token", jwt);
 
